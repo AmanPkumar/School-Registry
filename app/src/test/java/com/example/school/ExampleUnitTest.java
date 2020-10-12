@@ -1,4 +1,4 @@
-package com.example.videoplayer;
+package com.example.school;
 
 import org.junit.Test;
 
