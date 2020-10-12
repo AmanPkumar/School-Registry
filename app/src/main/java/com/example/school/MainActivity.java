@@ -1,30 +1,40 @@
 package com.example.school;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
     private EditText userName;
-    private EditText password;
+    private EditText userPassword;
     private Button loginButton;
     private TextView signInTextView;
 
-    private boolean credential = false;
+    private FirebaseAuth firebaseAuth;
+    private ProgressDialog progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        firebaseAuth = FirebaseAuth.getInstance();
 
         userName = findViewById(R.id.etUserName);
-        password = findViewById(R.id.etPassword);
+        userPassword = findViewById(R.id.etPassword);
         loginButton = findViewById(R.id.buttonLogin);
         signInTextView = findViewById(R.id.tvSignIn);
 
@@ -40,29 +50,36 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String inputname = userName.getText().toString();
-                String inputuserPassword = password.getText().toString();
+                String inputName = userName.getText().toString();
+                String inputUserPassword = userPassword.getText().toString();
 
-                if(inputname.isEmpty() || inputuserPassword.isEmpty()){
+                if(inputName.isEmpty() || inputUserPassword.isEmpty()){
                     Toast.makeText(MainActivity.this,"Please fill the credentials",Toast.LENGTH_SHORT).show();
-                }else{
-                    credential = checkCredentials(inputname,inputuserPassword);
-                    if(credential){
-                        Intent intent = new Intent(MainActivity.this,HomePage.class);
-                        startActivity(intent);
-                    }else {
-                        Toast.makeText(MainActivity.this,"Please check the credentials",Toast.LENGTH_SHORT).show();
-                    }
+                }else {
+                    logInTheUser(inputName,inputUserPassword);
                 }
+
 
             }
         });
     }
+    private void logInTheUser(String user,String password){
+        progressBar = new ProgressDialog(this);
+        progressBar.setMessage("Opening, please wait...");
+        progressBar.show();
+        firebaseAuth.signInWithEmailAndPassword(user,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    progressBar.dismiss();
+                    Intent newIntent = new Intent(MainActivity.this,HomePage.class);
+                    startActivity(newIntent);
+                }else {
+                    Toast.makeText(MainActivity.this,"Please fill correct credentials",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
-    private boolean checkCredentials(String name, String userPassword) {
-        if(name.equals("Aman") && userPassword.equals("123456")){
-            return true;
-        }
-        return false;
     }
+
 }
