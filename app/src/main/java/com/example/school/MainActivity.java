@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     private EditText userName;
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressBar;
+    private FirebaseUser firebaseUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +37,23 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance(); //for getting the instance of the firebase so that the firebase can be used
 
+        firebaseUser = firebaseAuth.getCurrentUser(); // getting the user
+
+
         userName = findViewById(R.id.etUserName);
         userPassword = findViewById(R.id.etPassword);
         loginButton = findViewById(R.id.buttonLogin);
         signInTextView = findViewById(R.id.tvSignIn);
+
+        //checking if the user already signed in or not
+        //so that he needs not to fill credentials all the time to log in
+
+        if(firebaseUser != null){
+            finish();
+            Intent intent = new Intent(MainActivity.this,HomePage.class);
+            startActivity(intent);
+        }
+
 
         // this method for the users who are not registered
         // it will take them to the register activity
@@ -63,10 +79,10 @@ public class MainActivity extends AppCompatActivity {
                 }else {
                     logInTheUser(inputName,inputUserPassword);
                 }
-
-
             }
         });
+
+
     }
     private void logInTheUser(String user,String password){
         // progress bar is for showing the progress when clicked on log in button
