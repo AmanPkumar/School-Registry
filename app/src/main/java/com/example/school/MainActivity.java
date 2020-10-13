@@ -31,12 +31,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        firebaseAuth = FirebaseAuth.getInstance();
+
+        firebaseAuth = FirebaseAuth.getInstance(); //for getting the instance of the firebase so that the firebase can be used
 
         userName = findViewById(R.id.etUserName);
         userPassword = findViewById(R.id.etPassword);
         loginButton = findViewById(R.id.buttonLogin);
         signInTextView = findViewById(R.id.tvSignIn);
+
+        // this method for the users who are not registered
+        // it will take them to the register activity
 
         signInTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //this is for logging the user in after his registration
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,17 +69,25 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private void logInTheUser(String user,String password){
+        // progress bar is for showing the progress when clicked on log in button
         progressBar = new ProgressDialog(this);
+        //message is set for the progress bar
         progressBar.setMessage("Opening, please wait...");
+        //this method is to show the progress bar
         progressBar.show();
+
+        //this is the method for the firebase to check whether this mail and password is already there or not
         firebaseAuth.signInWithEmailAndPassword(user,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    progressBar.dismiss();
+                    progressBar.dismiss(); // if user is logged in then the progress bar get dismissed
+
+                    //user will be sent to the homepage with this intent
                     Intent newIntent = new Intent(MainActivity.this,HomePage.class);
                     startActivity(newIntent);
                 }else {
+                    // if there is any mistake in mail or password then a pop up message will come saying check the credentials
                     Toast.makeText(MainActivity.this,"Please fill correct credentials",Toast.LENGTH_SHORT).show();
                 }
             }

@@ -38,7 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.buttonRegister);
         tvLogIn = findViewById(R.id.tvLogIn);
 
-
+        //if by mistake the user will come to the register activity and he has an account already, then he can go back using this
         tvLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,15 +50,17 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // getting the info filled by the user in the fields present
                 mail = newUserMail.getText().toString();
                 password = newUserPassword.getText().toString();
                 name = newUsername.getText().toString();
 
-                Boolean isValid = isValidate();
+                Boolean isValid = isValidate(); // storing the value returned by the function isValidate()
                 if(isValid){
-                    registerTheUser(mail,password);
-                    startActivity(new Intent(RegisterActivity.this,MainActivity.class));
+                    registerTheUser(mail,password); //if the value is true, registering the user
+                    startActivity(new Intent(RegisterActivity.this,MainActivity.class));//after registering sending the user back to the main activity
                 }else{
+                    //if the value is false, a toast will come up showing to fill the fields
                     Toast.makeText(RegisterActivity.this,"Please fill the above fields",Toast.LENGTH_SHORT).show();
                 }
             }
@@ -66,6 +68,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    // this function is for checking whether the user has filled all the fields or not
+    // if yes it will return true, otherwise false
     private boolean isValidate(){
         if(name.isEmpty() || password.isEmpty() || mail.isEmpty()){
             return false;
@@ -74,6 +78,8 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    //this is function for registering the user, using firebase
+    //if the registration is successful, it will show registration successful, otherwise failed
     public void registerTheUser(String userMail,String userPassword){
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.createUserWithEmailAndPassword(userMail,userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
