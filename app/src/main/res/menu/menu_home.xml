@@ -9,4 +9,9 @@
         android:id="@+id/action_logout"
         app:showAsAction="never"/>
 
+    <item
+        android:id="@+id/action_details"
+        android:title="Fill Details"
+        app:showAsAction="never"/>
+
 </menu>

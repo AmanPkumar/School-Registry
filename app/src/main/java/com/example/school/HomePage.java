@@ -78,6 +78,10 @@ public class HomePage extends AppCompatActivity {
             firebaseAuth.signOut();
             startActivity(new Intent(HomePage.this,MainActivity.class));
         }
+        //if Fill Details option is selected, user will be sent to the Details Activity
+        if(id == R.id.action_details){
+            startActivity(new Intent(HomePage.this,DetailsActivity.class));
+        }
         return super.onOptionsItemSelected(item);
     }
 
