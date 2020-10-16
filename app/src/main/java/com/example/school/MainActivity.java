@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText userPassword;
     private Button loginButton;
     private TextView signInTextView;
+    private TextView forgotPassword;
 
     private FirebaseAuth firebaseAuth;
     private ProgressDialog progressBar;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         userPassword = findViewById(R.id.etPassword);
         loginButton = findViewById(R.id.buttonLogin);
         signInTextView = findViewById(R.id.tvSignIn);
+        forgotPassword = findViewById(R.id.ForgotPassword);
 
         //checking if the user already signed in or not
         //so that he needs not to fill credentials all the time to log in
@@ -53,6 +55,13 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this,HomePage.class);
             startActivity(intent);
         }
+
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,ResetPassword.class));
+            }
+        });
 
 
         // this method for the users who are not registered
@@ -103,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent newIntent = new Intent(MainActivity.this,HomePage.class);
                     startActivity(newIntent);
                 }else {
+                    progressBar.dismiss(); // if user isn't logged in then the progress bar get dismissed and toast will pop up
                     // if there is any mistake in mail or password then a pop up message will come saying check the credentials
                     Toast.makeText(MainActivity.this,"Please fill correct credentials",Toast.LENGTH_SHORT).show();
                 }
