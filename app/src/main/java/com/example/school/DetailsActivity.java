@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class DetailsActivity extends AppCompatActivity {
 
@@ -13,6 +14,7 @@ public class DetailsActivity extends AppCompatActivity {
     private EditText detailClass;
     private EditText contactNumber;
     private Button btnSubmit;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,5 +26,6 @@ public class DetailsActivity extends AppCompatActivity {
         detailClass = findViewById(R.id.detailClass);
         contactNumber = findViewById(R.id.contactNumber);
         btnSubmit = findViewById(R.id.buttonSubmitDetails);
+        textView = findViewById(R.id.textView);
     }
 }
